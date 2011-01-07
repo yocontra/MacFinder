@@ -14,6 +14,9 @@ import csv
 import re
 
 print 'Starting MacFinder'
+
+#Data Format is as follows
+#Region, URL, Title, Price, ScreenSize, ProcessorClock, AmountOfRam, HDDSpace, CalculatedPrice, ProfitMargin
 profwriter = csv.writer(open('profitable.csv', 'w'), delimiter=',')
 valwriter = csv.writer(open('complete.csv', 'w'), delimiter=',')
 allwriter = csv.writer(open('incomplete.csv', 'w'), delimiter=',')
@@ -94,12 +97,13 @@ for c in donec:
                         loincomplete+=1
                         incomplete+=1
                 else:
-                        profit = ((57.33*float(size)) + (1201.71*float(ghz)) + (6.8*float(ram)) + (.43*float(hdd)) - 2656.07) - price
-                        valwriter.writerow([c,link,linedesc,price,size,ghz,ram,hdd,profit])
+                        estprice = ((57.33*float(size)) + (1201.71*float(ghz)) + (6.8*float(ram)) + (.43*float(hdd)) - 2656.07)
+                        profit = estprice - price
+                        valwriter.writerow([c,link,linedesc,price,size,ghz,ram,hdd,estprice,profit])
                         locomplete+=1
                         complete+=1
                         if profit > 85:
-                                profwriter.writerow([c,link,linedesc,price,size,ghz,ram,hdd,profit])
+                                profwriter.writerow([c,link,linedesc,price,size,ghz,ram,hdd,estprice,profit])
                                 loprofitable+=1
                                 profitable+=1
     print '%s Scan Results:'%c
@@ -108,7 +112,7 @@ for c in donec:
     print '%s Incomplete Entries'%loincomplete
     print '%s Profitable Entries'%loprofitable
 
-print 'Complete Scan Results:'%c
+print 'Complete Scan Results:'
 print '%s Total Entires'%count
 print '%s Complete Entries'%complete
 print '%s Incomplete Entries'%incomplete
