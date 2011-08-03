@@ -42,7 +42,7 @@ def getnum(rexp,isint,searchspaces,val,n):
 		if n<2:
 			val=re2num(rexp,isint,searchspaces[n])
 		else:
-			val='NotFound'
+			val='null'
 		return getnum(rexp,isint,searchspaces,val,n+1)
 	else:
 		return val
@@ -55,7 +55,7 @@ incomplete = 0
 profitable = 0
 for c in donec:
     print 'Scanning "' + c + '" Entries, please wait...'
-    http='http://%s.craigslist.org/search/sss?query=macbook+pro&minAsk=800&srchType=T&hasPic=1'%c
+    http='http://%s.craigslist.org/search/sss?query=macbook+pro&minAsk=500&srchType=T&hasPic=1'%c
     request = urllib2.urlopen(http)
     html = request.read()
     soup = BeautifulSoup(html)
@@ -81,18 +81,18 @@ for c in donec:
                 searchspaces = [linedesc,fulldesc];
                 price = getnum('\$[0-9]+',True,pricespaces,'',0)      
                 size = getnum('\D1[0-9]\.[0-9]\D',True,searchspaces,'',0)
-                if (size == 'NotFound'):
+                if (size == 'null'):
                         size = getnum('\D1[0-9]\D',True,searchspaces,'',0)
                 ghz = getnum('\s\d\.\d\d?\s?[Gg][Hh]',False,searchspaces,'',0)
-                if (ghz == 'NotFound') and ('i7' in html):
+                if (ghz == 'null') and ('i7' in html):
                         ghz = '2.53'
-                if (ghz == 'NotFound') and ('i5' in html):
+                if (ghz == 'null') and ('i5' in html):
                         ghz = '2.67'
                 ram = getnum('\D\d\s?[Gg][Bb]',True,searchspaces,'',0)
                 hdd = getnum('\D\d\d\d\s?[Gg][Bb]',True,searchspaces,'',0)
                 count+=1
                 locount+=1
-                if (price == 'NotFound') or (size == 'NotFound') or (ghz == 'NotFound') or (ram == 'NotFound') or (hdd == 'NotFound'):
+                if (price == 'null') or (size == 'null') or (ghz == 'null') or (ram == 'null') or (hdd == 'null'):
                         allwriter.writerow([c,link,linedesc,price,size,ghz,ram,hdd])
                         loincomplete+=1
                         incomplete+=1
